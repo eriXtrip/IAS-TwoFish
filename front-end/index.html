@@ -18,23 +18,13 @@
         }
 
         .container-fluid {
-            max-width: 1200px;
+            max-width: 800px;
             width: 100%;
             padding: 20px;
             background-color: #ffffff;
             border: 1px solid #ddd;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .left-side {
-            width: 50%;
-            padding-right: 20px; 
-        }
-
-        .right-side {
-            width: 50%;
-            padding-left: 20px;
         }
 
         .form-group {
@@ -52,7 +42,7 @@
         .pagination {
             display: flex;
             justify-content: space-between;
-            align-items: center
+            align-items: center;
             margin-top: 20px;
         }
 
@@ -85,56 +75,61 @@
             font-size: 1.2rem;
             color: #555;
         }
-
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <!-- Left Side -->
+    <div class="container-fluid box-shadow mx-3">
+        <h2 class="mb-4 text-center text-primary">TwoFish Algorithm Tool</h2>
+
         <div class="row">
-            <div class="col-md-8 left-side">
-                <h2 class="mb-4">TwoFish Algorithm Tool</h2>
-
-                <!-- Input for Plaintext -->
-                <div class="form-group">
-                    <label for="plaintext">Plaintext</label>
-                    <input type="text" class="form-control" id="plaintext" placeholder="Enter plaintext">
-                </div>
-
-                <!-- Input for Key -->
-                <div class="form-group">
-                    <label for="key">Key</label>
-                    <input type="text" class="form-control" id="key" placeholder="Enter key">
-                </div>
-
-                <!-- Buttons for Encrypt and Decrypt -->
-                <div class="d-flex gap-2">
-                    <button class="btn btn-primary flex-grow-1" id="encryptBtn">Encrypt</button>
-                    <button class="btn btn-secondary flex-grow-1" id="decryptBtn">Decrypt</button>
-                </div>
-
-                <!-- Result Display -->
-                <div class="result-box mt-4" id="resultBox">
-                    Result will appear here...
-                </div>
+            <!-- Input for Plaintext -->
+            <div class="form-group">
+                <label for="plaintext" class="fw-bold">&nbsp;Plaintext</label>
+                <input type="text" class="form-control" id="plaintext" placeholder="Enter plaintext">
             </div>
 
-            <!-- Right Side -->
-            <div class="col-md-4 right-side">
-                <!-- Pagination -->
-                <nav aria-label="Page navigation">
-                    <div class="pagination">
-                        <a href="#" id="prevBtn">Prev</a>
-                        <span class="current-page" id="currentPage">1</span>
-                        <a href="#" id="nextBtn">Next</a>
-                    </div>
-                </nav>
-
-                <!-- Sample Content -->
-                <div class="sample-content mt-4" id="sampleContent">
-                    This is the sample content for Page 1.
-                </div>
+            <!-- Input for Key -->
+            <div class="form-group">
+                <label for="key" class="fw-bold">&nbsp;Key</label>
+                <input type="text" class="form-control" id="key" placeholder="Enter key">
             </div>
+        </div>
+
+        <div class="row">
+            <!-- Buttons for Encrypt and Decrypt -->
+        <div class="d-flex gap-2 mb-4">
+            <button class="btn btn-primary flex-grow-1" id="encryptBtn">Encrypt</button>
+            <button class="btn btn-secondary flex-grow-1" id="decryptBtn">Decrypt</button>
+        </div>
+        </div>
+
+        <div class="row">
+            <!-- Result Display -->
+            <div class="form-group">
+                <label for="resultBox" class="fw-bold">&nbsp;Result</label>
+                <input type="text" class="form-control" id="resultBox" placeholder="Result will appear here...">
+            </div>
+        </div>
+
+        <div class="row mx-1">
+            <!-- Pagination -->
+            <nav aria-label="Page navigation" class="mt-4">
+                <div class="pagination">
+                    <a href="#" id="prevBtn">Prev</a>
+                    <span class="current-page" id="currentPage">1</span>
+                    <a href="#" id="nextBtn">Next</a>
+                </div>
+            </nav>
+
+            <!-- Sample Content -->
+            <div class="sample-content mt-4 rounded-3" id="sampleContent">
+                This is the sample content for Page 1.
+            </div>
+        </div>
+
+        <div class="row mx-1 mt-3">
+            <!-- Go Back Button -->
+            <button class="btn btn-secondary flex-grow-1 bg-success" id="goBackBtn" onclick="goBack()">Go Back</button>
         </div>
     </div>
 
@@ -178,6 +173,13 @@
                 updatePagination();
             }
         });
+
+        function goBack() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
 
         // Initialize pagination
         updatePagination();
