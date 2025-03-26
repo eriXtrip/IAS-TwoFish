@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TwoFish Algorithm Tool</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Full-screen flexbox layout to center the container */
+        body, html {
+            height: 100%; /* Ensure the body and html take up the full viewport height */
+            margin: 0; /* Remove default margins */
+            display: flex; /* Enable flexbox */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            background-color: #f8f9fa; /* Light gray background */
+        }
+
+        .container-fluid {
+            max-width: 1200px; /* Optional: Restrict the maximum width */
+            width: 100%; /* Make the container responsive */
+            padding: 20px; /* Add some padding for spacing */
+            background-color: #ffffff; /* White background for contrast */
+            border: 1px solid #ddd; /* Subtle border */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+        }
+
+        .left-side {
+            width: 50%; /* Takes up 50% of the width */
+            padding-right: 20px; /* Adds spacing between left and right sides */
+        }
+
+        .right-side {
+            width: 50%; /* Takes up 50% of the width */
+            padding-left: 20px; /* Adds spacing between left and right sides */
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            min-height: 50px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: space-between; /* Spreads items across the row */
+            align-items: center; /* Aligns items vertically */
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .pagination a:hover {
+            box-shadow: 0px 0px 0px 2px #007bff; /* Adds a black shadow with blur and spread */
+        }
+
+        .current-page {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .sample-content {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #ffffff;
+            min-height: 100px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Left Side -->
+        <div class="row">
+            <div class="col-md-8 left-side">
+                <h2 class="mb-4">TwoFish Algorithm Tool</h2>
+
+                <!-- Input for Plaintext -->
+                <div class="form-group">
+                    <label for="plaintext">Plaintext</label>
+                    <input type="text" class="form-control" id="plaintext" placeholder="Enter plaintext">
+                </div>
+
+                <!-- Input for Key -->
+                <div class="form-group">
+                    <label for="key">Key</label>
+                    <input type="text" class="form-control" id="key" placeholder="Enter key">
+                </div>
+
+                <!-- Buttons for Encrypt and Decrypt -->
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary flex-grow-1" id="encryptBtn">Encrypt</button>
+                    <button class="btn btn-secondary flex-grow-1" id="decryptBtn">Decrypt</button>
+                </div>
+
+                <!-- Result Display -->
+                <div class="result-box mt-4" id="resultBox">
+                    Result will appear here...
+                </div>
+            </div>
+
+            <!-- Right Side -->
+            <div class="col-md-4 right-side">
+                <!-- Pagination -->
+                <nav aria-label="Page navigation">
+                    <div class="pagination">
+                        <a href="#" id="prevBtn">Prev</a>
+                        <span class="current-page" id="currentPage">1</span>
+                        <a href="#" id="nextBtn">Next</a>
+                    </div>
+                </nav>
+
+                <!-- Sample Content -->
+                <div class="sample-content mt-4" id="sampleContent">
+                    This is the sample content for Page 1.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // JavaScript for handling pagination
+        let currentPage = 1;
+        const totalPages = 16; // Total number of pages
+
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentPageSpan = document.getElementById('currentPage');
+        const sampleContentDiv = document.getElementById('sampleContent');
+
+        function updatePagination() {
+            currentPageSpan.textContent = currentPage; // Update the current page number
+            sampleContentDiv.innerText = `This is the sample content for Page ${currentPage}.`;
+
+            // Disable "Prev" button if on the first page
+            prevBtn.style.pointerEvents = currentPage === 1 ? 'none' : 'auto';
+            prevBtn.style.color = currentPage === 1 ? '#ccc' : '#007bff';
+
+            // Disable "Next" button if on the last page
+            nextBtn.style.pointerEvents = currentPage === totalPages ? 'none' : 'auto';
+            nextBtn.style.color = currentPage === totalPages ? '#ccc' : '#007bff';
+        }
+
+        prevBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (currentPage > 1) {
+                currentPage--;
+                updatePagination();
+            }
+        });
+
+        nextBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (currentPage < totalPages) {
+                currentPage++;
+                updatePagination();
+            }
+        });
+
+        // Initialize pagination
+        updatePagination();
+    </script>
+</body>
+</html>
