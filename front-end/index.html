@@ -12,8 +12,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f8f9fa;
+            background-color: #e9ecef;
             padding: 10px;
+            transition: background-color 0.3s ease;
         }
 
         .container-fluid {
@@ -21,33 +22,35 @@
             width: 100%;
             padding: 20px;
             background-color: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
         }
 
-        .navbar .nav-item .nav-link:hover {
-            color: #007bff;
-            background-color: rgba(0, 123, 255, 0.1);
-            border-radius: 5px;
+        .navbar {
+            background-color: #343a40;
         }
 
-        .navbar .nav-item .nav-link.active {
-            color: #fff;
-            background-color: #007bff;
-            border-radius: 5px;
+        .navbar .nav-link {
+            color: #ffffff;
+        }
+
+        .navbar .nav-link:hover {
+            color: #ffc107;
+            transition: color 1s ease;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .result-box {
             margin-top: 20px;
             padding: 15px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
+            border: 1px solid #ced4da;
+            background-color: #f8f9fa;
             min-height: 50px;
+            transition: background-color 0.3s ease;
         }
 
         .pagination {
@@ -62,12 +65,14 @@
             color: #007bff;
             font-weight: bold;
             padding: 5px 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #ced4da;
             border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .pagination a:hover {
-            box-shadow: 0px 0px 0px 2px #007bff;
+            background-color: #007bff;
+            color: #ffffff;
         }
 
         .current-page {
@@ -79,7 +84,7 @@
         .sample-content {
             margin-top: 20px;
             padding: 15px;
-            border: 1px solid #ddd;
+            border: 1px solid #ced4da;
             background-color: #ffffff;
             min-height: 100px;
             text-align: center;
@@ -105,7 +110,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">TwoFish Tool</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -115,6 +120,17 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#aboutModal">About</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            More Tools
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="index.html">TwoFish</a></li>
+                            <li><a class="dropdown-item" href="#">MD5</a></li>
+                            <li><a class="dropdown-item" href="#">AES</a></li>
+                            <li><a class="dropdown-item" href="#">Deffie-Hellman</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
