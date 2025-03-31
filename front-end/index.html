@@ -6,53 +6,59 @@
     <title>TwoFish Algorithm Tool</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /* Global Layout: Centered, full-height container with flexbox */
         body, html {
             height: 100%;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #e9ecef;
+            background-color: #e9ecef; /* Soft gray background */
             padding: 10px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease; /* Smooth background color transition */
         }
 
+        /* Main Content Container: Responsive width, white background, subtle shadow */
         .container-fluid {
             max-width: 600px;
             width: 100%;
             padding: 20px;
             background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
             transition: box-shadow 0.3s ease;
         }
 
+        /* Navigation Styling: Dark theme with hover effects */
         .navbar {
-            background-color: #343a40;
+            background-color: #343a40; /* Dark background for navbar */
         }
 
         .navbar .nav-link {
-            color: #ffffff;
+            color: #ffffff; /* White text for readability */
         }
 
         .navbar .nav-link:hover {
-            color: #ffc107;
+            color: #ffc107; /* Amber color on hover */
             transition: color 1s ease;
         }
 
+        /* Form and Input Styling: Increased spacing, clean look */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 20px; /* More vertical space between form groups */
         }
 
+        /* Result Display: Subtle border, background, and transition */
         .result-box {
             margin-top: 20px;
             padding: 15px;
-            border: 1px solid #ced4da;
+            border: 1px solid #ced4da; /* Soft border color */
             background-color: #f8f9fa;
             min-height: 50px;
             transition: background-color 0.3s ease;
         }
 
+        /* Pagination Styling: Interactive navigation with hover states */
         .pagination {
             display: flex;
             justify-content: space-between;
@@ -81,6 +87,7 @@
             color: #333;
         }
 
+        /* Sample Content: Centered text, subtle border */
         .sample-content {
             margin-top: 20px;
             padding: 15px;
@@ -92,6 +99,7 @@
             color: #555;
         }
 
+        /* Responsive Design: Mobile-first adjustments */
         @media (max-width: 768px) {
             .container-fluid {
                 max-width: 100%;
@@ -205,41 +213,57 @@
     </div>
 
     <script>
-        let currentPage = 1;
-        const totalPages = 16;
+        // Pagination state management
+        let currentPage = 1;  // Start on first page
+        const totalPages = 16;  // Total number of pages in the sample content
 
+        // DOM element references for pagination
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const currentPageSpan = document.getElementById('currentPage');
         const sampleContentDiv = document.getElementById('sampleContent');
 
+        /**
+         * Updates pagination UI and content based on current page
+         * - Updates page number display
+         * - Changes sample content text
+         * - Manages navigation button states (enabled/disabled)
+         */
         function updatePagination() {
+            // Update current page display
             currentPageSpan.textContent = currentPage;
+            
+            // Update sample content text dynamically
             sampleContentDiv.innerText = `This is the sample content for Page ${currentPage}.`;
 
+            // Disable 'Previous' button on first page
             prevBtn.style.pointerEvents = currentPage === 1 ? 'none' : 'auto';
             prevBtn.style.color = currentPage === 1 ? '#ccc' : '#007bff';
 
+            // Disable 'Next' button on last page
             nextBtn.style.pointerEvents = currentPage === totalPages ? 'none' : 'auto';
             nextBtn.style.color = currentPage === totalPages ? '#ccc' : '#007bff';
         }
 
+        // Event listener for previous page navigation
         prevBtn.addEventListener('click', function (e) {
-            e.preventDefault();
+            e.preventDefault();  // Prevent default link behavior
             if (currentPage > 1) {
-                currentPage--;
-                updatePagination();
+                currentPage--;   // Decrement page
+                updatePagination();  // Update UI
             }
         });
 
+        // Event listener for next page navigation
         nextBtn.addEventListener('click', function (e) {
-            e.preventDefault();
+            e.preventDefault();  // Prevent default link behavior
             if (currentPage < totalPages) {
-                currentPage++;
-                updatePagination();
+                currentPage++;   // Increment page
+                updatePagination();  // Update UI
             }
         });
 
+        // Initialize pagination on page load
         updatePagination();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
