@@ -169,6 +169,63 @@ class Twofish {
     return finalBlock;
   }
 
+  // Submethod for the encryptionRounds function
+  /**
+   * implements the confusion and diffusion of the Twofish algorithm
+   * in layman's terms, this transforms that data into complex key or 
+   * key dependent data
+   */
+  fFunction(r, sBox, roundKey) {
+    return (r ^ sBox[roundKey % sBox.length]) ^ roundKey;
+  }
+  
+  /**
+   * Parameters:
+   * 
+   * block: plaintext that are whitened
+   * 
+   * return: after round 
+   */
+  encryptionRounds(dataBlock) {
+    // use the subkey
+    const subkeys = this.subkeys;
+
+    // use the sbox
+    const sBox = this.S;
+
+    // slice the block into two halves
+    let left = dataBlock.slice(0, 8);
+    let right = dataBlock.slice(8, 16);
+  
+    // go through 16 rounds of encryption
+    for (let round = 0; round < 16; round++) {
+
+      // use the ffunction method
+      let fOut = right.map((r, i) => fFunction(r, sBox, subkeys[round]));
+      let newRight = left.map((l, i) => l ^ fOut[i % fOut.length]);
+      
+      // this follows the method results >> new result
+      left = right;
+      right = newRight;
+    }
+  
+    return [...left, ...right];
+  }
+
+  /**
+   * Parameters: 
+   * 
+   * block: after round 
+   * 
+   * return: final encrypted block
+   * */
+  finalWhitening(dataBlock) {
+    // use the subkey
+    const subkeys = this.subkeys;
+    
+    return dataBlock.map((byte, i) => byte ^ subkeys[i + 16]);
+  }
+  
   // TODO: Implement the decryptBlock method, actual encryption begins here, as we are accepting data larger / smaller than 128 bits
   decryptBlock(dataBlock /* Expect this to become an array of length 16. */) {
     // Input and output whitening are done on each 16-bit batch.
