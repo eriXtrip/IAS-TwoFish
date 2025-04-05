@@ -3,6 +3,11 @@
 /**
  * Twofish class implementing the Twofish encryption algorithm.
  * The class supports encryption and decryption using a key.
+ * KEY Distribution
+ * k0-k3 are used for input whitening before the encryption starts.
+
+ * k4-k7 are used for output whitening after the encryption finishes.
+ * The rest are used in the round function (FunctionF) for the 16 rounds of the Twofish encryption process.
  */
 class Twofish {
   /**
@@ -151,10 +156,51 @@ class Twofish {
     );
   }
 
+  // TODO: Implement the encryptBlock method, actual encryption begins here, as we are accepting data larger / smaller than 128 bits
+  encryptBlock(dataBlock /* Expect this to become an array of length 16. */) {
+    // Input and output whitening are done on each 16-bit batch.
+
+    const newBlock = this.applyWhitening(dataBlock, this.subkeys, 0); // An offset of zero consumer k0-k3
+
+    // TODO: Perform the actual encryption here
+
+    // TODO: After doing the 16 rounds, apply the whitening again
+    const finalBlock = this.applyWhitening(newBlock, this.subkeys, 4); // An offset of 4 consumer k4-k7
+    return finalBlock;
+  }
+
+  // TODO: Implement the decryptBlock method, actual encryption begins here, as we are accepting data larger / smaller than 128 bits
+  decryptBlock(dataBlock /* Expect this to become an array of length 16. */) {
+    // Input and output whitening are done on each 16-bit batch.
+
+    const newBlock = this.applyWhitening(dataBlock, this.subkeys, 4); // An offset of zero consumer k4-k7
+
+    // TODO: Perform the actual decryption here
+
+    // TODO: After doing the 16 rounds, apply the whitening again
+    const finalBlock = this.applyWhitening(newBlock, this.subkeys, 0); // An offset of 4 consumer k0-k3
+    return finalBlock;
+  }
+
   encrypt(plainText) {
     const plainTextArray = this.strToUTF8Arr(plainText);
     const encryptedResult = [];
 
+    for (let i = 0; i < plainTextArray.length; i += this.BLOCK_SIZE) {
+      const dataBlock = plainTextArray.slice(i, i + this.BLOCK_SIZE);
+      encryptedResult.push(...this.encryptBlock(dataBlock));
+    }
+
     return Buffer.from(encryptedResult).toString("base64");
+  }
+
+  decrypt(cipherText) {
+    const cipherTextArray = Array.from(Buffer.from(cipherText, "base64"));
+    const decryptedResult = [];
+    for (let i = 0; i < cipherTextArray.length; i += this.BLOCK_SIZE) {
+      const dataBlock = cipherTextArray.slice(i, i + this.BLOCK_SIZE);
+      decryptedResult.push(...this.decryptBlock(dataBlock));
+    }
+    return this.UTF8ArrToStr(decryptedResult).trim();
   }
 }
