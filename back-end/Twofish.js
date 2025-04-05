@@ -199,7 +199,6 @@ class Twofish {
   
     // go through 16 rounds of encryption
     for (let round = 0; round < 16; round++) {
-
       // use the ffunction method
       let fOut = right.map((r, i) => fFunction(r, sBox, subkeys[round]));
       let newRight = left.map((l, i) => l ^ fOut[i % fOut.length]);
@@ -226,6 +225,38 @@ class Twofish {
     return dataBlock.map((byte, i) => byte ^ subkeys[i + 16]);
   }
   
+  // use this if the decryption is not working, it complements with the encryptionRounds method
+  decryptionRounds(block) {
+    // use the subkey
+    const subkeys = this.subkeys;
+
+    // use the sbox
+    const sBox = this.S;
+
+    let left = block.slice(0, 8);
+    let right = block.slice(8, 16);
+  
+    // reverse the encrytion
+    for (let round = 15; round >= 0; round--) {
+      let fOut = left.map((l, i) => fFunction(l, sBox, subkeys[round]));
+      let newLeft = right.map((r, i) => r ^ fOut[i % fOut.length]);
+      right = left;
+      left = newLeft;
+    }
+  
+    return [...left, ...right];
+  }
+
+  // if using the decryptionRounds method, do this pipeline
+  /**
+   * const unwhitened = finalWhitening(finalEncrypted); // Undo final whitening
+   * const decryptedRounds = decryptionRounds(unwhitened); // undo the encryption
+   * const originalBlock = applyWhitening(decryptedRounds, subkeys); // Undo input whitening
+   * 
+   * const decryptedText = Buffer.from(originalBlock).toString().replace(/\0/g, '');
+   * console.log("Decrypted Text:", decryptedText);
+   */
+
   // TODO: Implement the decryptBlock method, actual encryption begins here, as we are accepting data larger / smaller than 128 bits
   decryptBlock(dataBlock /* Expect this to become an array of length 16. */) {
     // Input and output whitening are done on each 16-bit batch.
