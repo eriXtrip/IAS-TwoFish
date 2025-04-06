@@ -200,7 +200,7 @@ class Twofish {
     // go through 16 rounds of encryption
     for (let round = 0; round < 16; round++) {
       // use the ffunction method
-      let fOut = right.map((r, i) => fFunction(r, sBox, subkeys[round]));
+      let fOut = right.map((r, i) => this.fFunction(r, sBox, subkeys[round]));
       let newRight = left.map((l, i) => l ^ fOut[i % fOut.length]);
       
       // this follows the method results >> new result
@@ -238,7 +238,7 @@ class Twofish {
   
     // reverse the encrytion
     for (let round = 15; round >= 0; round--) {
-      let fOut = left.map((l, i) => fFunction(l, sBox, subkeys[round]));
+      let fOut = left.map((l, i) => this.fFunction(l, sBox, subkeys[round]));
       let newLeft = right.map((r, i) => r ^ fOut[i % fOut.length]);
       right = left;
       left = newLeft;
@@ -279,11 +279,12 @@ class Twofish {
       encryptedResult.push(...this.encryptBlock(dataBlock));
     }
 
-    return Buffer.from(encryptedResult).toString("base64");
+    return btoa(String.fromCharCode(...encryptedResult));
   }
 
   decrypt(cipherText) {
-    const cipherTextArray = Array.from(Buffer.from(cipherText, "base64"));
+    const decodedString = atob(cipherText);
+    const cipherTextArray = Array.from(new Uint8Array(decodedString.split('').map(char => char.charCodeAt(0))));
     const decryptedResult = [];
     for (let i = 0; i < cipherTextArray.length; i += this.BLOCK_SIZE) {
       const dataBlock = cipherTextArray.slice(i, i + this.BLOCK_SIZE);
