@@ -355,7 +355,7 @@
                     const {
                         roundsArr,
                         finalBlock
-                    } = twofish.encrypt(plaintext);
+                    } = twofish.encryptBlock(plaintext);
                     resultBox.textContent = `${finalBlock}`;
 
                     // Simulate intermediate results for each round
