@@ -162,19 +162,12 @@ class Twofish {
 
     const newBlock = this.applyWhitening(dataBlock, this.subkeys, 0); // An offset of zero consumer k0-k3
 
-    // Perform the actual encryption here
-    const {
-      roundsArr,
-      finalBlock
-    } = this.encryptionRounds(newBlock);
+    // TODO: Perform the actual encryption here
+    const encryptedBlock = this.encryptionRounds(newBlock);
 
-    // After doing the 16 rounds, apply the whitening again
-    const finalWhitenedBlock = this.applyWhitening(finalBlock, this.subkeys, 4); // An offset of 4 consumer k4-k7
-    
-    return {
-      roundsArr,
-      finalBlock: finalWhitenedBlock
-    };
+    // TODO: After doing the 16 rounds, apply the whitening again
+    const finalBlock = this.applyWhitening(encryptedBlock, this.subkeys, 4); // An offset of 4 consumer k4-k7
+    return finalBlock;
   }
 
   // Submethod for the encryptionRounds function
@@ -204,9 +197,6 @@ class Twofish {
     // slice the block into two halves
     let left = dataBlock.slice(0, 8);
     let right = dataBlock.slice(8, 16);
-
-    // for the sake of the output of the rounds
-    const roundsArr = [];
   
     // go through 16 rounds of encryption
     for (let round = 0; round < 16; round++) {
@@ -217,15 +207,23 @@ class Twofish {
       // this follows the method results >> new result
       left = right;
       right = newRight;
-
-      // push the current round to array
-      roundsArr.push([...left, ...right]);
     }
   
-    return {
-      roundsArr: roundsArr,
-      finalBlock: [...left, ...right]
-    };
+    return [...left, ...right];
+  }
+
+  /**
+   * Parameters: 
+   * 
+   * block: after round 
+   * 
+   * return: final encrypted block
+   * */
+  finalWhitening(dataBlock) {
+    // use the subkey
+    const subkeys = this.subkeys;
+    
+    return dataBlock.map((byte, i) => byte ^ subkeys[i + 16]);
   }
   
   // use this if the decryption is not working, it complements with the encryptionRounds method
@@ -266,10 +264,10 @@ class Twofish {
 
     const newBlock = this.applyWhitening(dataBlock, this.subkeys, 4); // An offset of zero consumer k4-k7
 
-    // Perform the actual decryption here
+    // TODO: Perform the actual decryption here
     const decryptedBlock = this.decryptionRounds(newBlock);
 
-    // After doing the 16 rounds, apply the whitening again
+    // TODO: After doing the 16 rounds, apply the whitening again
     const finalBlock = this.applyWhitening(decryptedBlock, this.subkeys, 0); // An offset of 4 consumer k0-k3
     return finalBlock;
   }
@@ -283,12 +281,14 @@ class Twofish {
       encryptedResult.push(...this.encryptBlock(dataBlock));
     }
 
-    return btoa(String.fromCharCode(...encryptedResult));
+    const binaryString = String.fromCharCode(...new Uint8Array(encryptedResult));
+    return btoa(binaryString);
   }
 
   decrypt(cipherText) {
-    const decodedString = atob(cipherText);
-    const cipherTextArray = Array.from(new Uint8Array(decodedString.split('').map(char => char.charCodeAt(0))));
+    const binaryStr = atob(cipherText);
+    const cipherTextArray = Uint8Array.from(binaryStr, c => c.charCodeAt(0));
+
     const decryptedResult = [];
     for (let i = 0; i < cipherTextArray.length; i += this.BLOCK_SIZE) {
       const dataBlock = cipherTextArray.slice(i, i + this.BLOCK_SIZE);
