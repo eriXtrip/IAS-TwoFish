@@ -162,11 +162,19 @@ class Twofish {
 
     const newBlock = this.applyWhitening(dataBlock, this.subkeys, 0); // An offset of zero consumer k0-k3
 
-    // TODO: Perform the actual encryption here
+    // Perform the actual encryption here
+    const {
+      roundsArr,
+      finalBlock
+    } = this.encryptionRounds(newBlock);
 
-    // TODO: After doing the 16 rounds, apply the whitening again
-    const finalBlock = this.applyWhitening(newBlock, this.subkeys, 4); // An offset of 4 consumer k4-k7
-    return finalBlock;
+    // After doing the 16 rounds, apply the whitening again
+    const finalWhitenedBlock = this.applyWhitening(finalBlock, this.subkeys, 4); // An offset of 4 consumer k4-k7
+    
+    return {
+      roundsArr,
+      finalBlock: finalWhitenedBlock
+    };
   }
 
   // Submethod for the encryptionRounds function
@@ -196,6 +204,9 @@ class Twofish {
     // slice the block into two halves
     let left = dataBlock.slice(0, 8);
     let right = dataBlock.slice(8, 16);
+
+    // for the sake of the output of the rounds
+    const roundsArr = [];
   
     // go through 16 rounds of encryption
     for (let round = 0; round < 16; round++) {
@@ -206,23 +217,15 @@ class Twofish {
       // this follows the method results >> new result
       left = right;
       right = newRight;
+
+      // push the current round to array
+      roundsArr.push([...left, ...right]);
     }
   
-    return [...left, ...right];
-  }
-
-  /**
-   * Parameters: 
-   * 
-   * block: after round 
-   * 
-   * return: final encrypted block
-   * */
-  finalWhitening(dataBlock) {
-    // use the subkey
-    const subkeys = this.subkeys;
-    
-    return dataBlock.map((byte, i) => byte ^ subkeys[i + 16]);
+    return {
+      roundsArr: roundsArr,
+      finalBlock: [...left, ...right]
+    };
   }
   
   // use this if the decryption is not working, it complements with the encryptionRounds method
@@ -263,10 +266,11 @@ class Twofish {
 
     const newBlock = this.applyWhitening(dataBlock, this.subkeys, 4); // An offset of zero consumer k4-k7
 
-    // TODO: Perform the actual decryption here
+    // Perform the actual decryption here
+    const decryptedBlock = this.decryptionRounds(newBlock);
 
-    // TODO: After doing the 16 rounds, apply the whitening again
-    const finalBlock = this.applyWhitening(newBlock, this.subkeys, 0); // An offset of 4 consumer k0-k3
+    // After doing the 16 rounds, apply the whitening again
+    const finalBlock = this.applyWhitening(decryptedBlock, this.subkeys, 0); // An offset of 4 consumer k0-k3
     return finalBlock;
   }
 

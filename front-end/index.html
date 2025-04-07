@@ -352,24 +352,19 @@
                     const twofish = new Twofish(key);
 
                     // Encrypt the plaintext
-                    const ciphertext = twofish.encrypt(plaintext);
-                    resultBox.textContent = `${ciphertext}`;
+                    const {
+                        roundsArr,
+                        finalBlock
+                    } = twofish.encrypt(plaintext);
+                    resultBox.textContent = `${finalBlock}`;
 
                     // Simulate intermediate results for each round
                     const plainTextArray = twofish.strToUTF8Arr(plaintext);
+
                     roundResults = [];
 
-                    for (let i = 0; i < plainTextArray.length; i += twofish.BLOCK_SIZE) {
-                        const dataBlock = plainTextArray.slice(i, i + twofish.BLOCK_SIZE);
-
-                        // Apply input whitening
-                        let block = twofish.applyWhitening(dataBlock, twofish.subkeys, 0);
-
-                        // Perform 16 rounds of encryption and save intermediate results
-                        for (let round = 0; round < 16; round++) {
-                            block = twofish.encryptionRounds(block);
-                            roundResults.push([...block]);
-                        }
+                    for (const r of roundsArr) {
+                        roundResults.push(r);
                     }
 
                     // Update pagination to display round results
